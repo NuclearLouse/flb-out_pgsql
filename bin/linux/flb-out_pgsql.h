@@ -72,8 +72,6 @@ extern GoInt FLBPluginRegister(void* ctx);
 extern GoInt FLBPluginInit(void* ctx);
 extern GoInt FLBPluginFlushCtx(void* ctx, void* data, int length, char* tag);
 extern GoInt FLBPluginExitCtx(void* ctx);
-extern GoInt FLBPluginFlush(void* data, int length, char* tag);
-extern GoInt FLBPluginExit();
 
 #ifdef __cplusplus
 }
