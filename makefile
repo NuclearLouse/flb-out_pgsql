@@ -1,5 +1,8 @@
-.PHONY: build
-build:
-	go build -mod vendor -v -buildmode=c-shared -o ../flb-out_pgsql_bin_windows/flb-out_pgsql.so .
+.PHONY: windows
+windows:
+	go build -mod vendor -v -buildmode=c-shared -o ./bin/windows/flb-out_pgsql.so .
 
-.DEFAULT_GOAL := build
+.PHONY: linux
+linux:
+	go build -mod vendor -v -buildmode=c-shared -o ./bin/linux/flb-out_pgsql.so .
+
