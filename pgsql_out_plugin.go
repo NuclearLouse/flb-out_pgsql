@@ -17,7 +17,7 @@ import (
 
 //export FLBPluginRegister
 func FLBPluginRegister(ctx unsafe.Pointer) int {
-	return output.FLBPluginRegister(ctx, "postgresql", "PostgreSQL GO!")
+	return output.FLBPluginRegister(ctx, "pgsql", "PostgreSQL GO!")
 }
 
 var id int
