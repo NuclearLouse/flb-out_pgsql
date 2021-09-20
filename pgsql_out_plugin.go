@@ -27,13 +27,15 @@ type pgClients struct {
 	m map[string]*pgclient.PGClient
 }
 
-var outputs *pgClients
-
-func init() {
-	outputs = &pgClients{
-		m: make(map[string]*pgclient.PGClient),
-	}
+var outputs *pgClients = &pgClients{
+	m: make(map[string]*pgclient.PGClient),
 }
+
+// func init() {
+// 	outputs = &pgClients{
+// 		m: make(map[string]*pgclient.PGClient),
+// 	}
+// }
 
 func (p *pgClients) Set(key string, client *pgclient.PGClient) {
 	p.Lock()
