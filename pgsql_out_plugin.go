@@ -160,15 +160,15 @@ func FLBPluginExitCtx(ctx unsafe.Pointer) int {
 }
 
 //export FLBPluginFlush
-func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
-	// log.Print("[pg_plugin] Flush called for unknown instance")
-	return output.FLB_OK
-}
+// func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
+// 	// log.Print("[pg_plugin] Flush called for unknown instance")
+// 	return output.FLB_OK
+// }
 
 //export FLBPluginExit
-func FLBPluginExit() int {
-	// log.Print("[pg_plugin] Exit called for unknown instance")
-	return output.FLB_OK
-}
+// func FLBPluginExit() int {
+// 	// log.Print("[pg_plugin] Exit called for unknown instance")
+// 	return output.FLB_OK
+// }
 
 func main() {}
