@@ -137,6 +137,8 @@ func FLBPluginFlushCtx(ctx, data unsafe.Pointer, length C.int, tag *C.char) int 
 		err := client.FlushLogs(context.Background(), C.GoString(tag), datas)
 		if err != nil {
 			log.Println("[error] [pg_plugin] flush json log-records to database:", err.Error())
+			// он будет пытаться отправит только эти данные, надо дать число попыток?
+			return output.FLB_RETRY
 		}
 	} else {
 		return output.FLB_RETRY
