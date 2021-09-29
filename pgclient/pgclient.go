@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
+
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -26,6 +27,7 @@ type PGConfig struct {
 type PGClient struct {
 	Config *PGConfig
 	pool   *pgxpool.Pool
+	log    *logrus.Logger
 }
 
 func NewConfig(connString, schema, table string) *PGConfig {
@@ -40,7 +42,7 @@ func NewConfig(connString, schema, table string) *PGConfig {
 	}
 }
 
-func New(ctx context.Context, config *PGConfig) (*PGClient, error) {
+func New(ctx context.Context, config *PGConfig, log *logrus.Logger) (*PGClient, error) {
 	pool, err := pgxpool.Connect(ctx, config.connString)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to create connection pool")
@@ -49,6 +51,7 @@ func New(ctx context.Context, config *PGConfig) (*PGClient, error) {
 	return &PGClient{
 		Config: config,
 		pool:   pool,
+		log:    log,
 	}, nil
 }
 
@@ -63,6 +66,9 @@ func (pg *PGClient) CheckIfTableExist(ctx context.Context) error {
 
 	//TODO: Всетаки попробовать создавать таблицы и схему через IF NOT EXISTS
 	//&& err.Error() != "no rows in result set"
+
+	pg.log.Tracef("check if schema %s exists", pg.Config.Schema)
+
 	if err := tx.QueryRow(ctx,
 		"SELECT catalog_name FROM information_schema.schemata WHERE schema_name = $1", pg.Config.Schema,
 	).Scan(&dbName); err != nil {
@@ -80,9 +86,13 @@ func (pg *PGClient) CheckIfTableExist(ctx context.Context) error {
 		); err != nil {
 			return errors.Wrap(err, "unable to create schema")
 		}
-		log.Println("[ info] [pg_plugin] create schema:", pg.Config.Schema)
+
+		pg.log.Tracef("[pg-plugin] schema %s not exists - create schema", pg.Config.Schema)
+
 	} else {
-		log.Printf("[pg_plugin] skip creating a schema - the schema: %s exists", pg.Config.Schema)
+
+		pg.log.Tracef("[pg-plugin] skip creating a schema - the schema: %s exists", pg.Config.Schema)
+
 		rows, err := tx.Query(ctx,
 			"SELECT table_schema FROM information_schema.tables WHERE table_name = $1", pg.Config.Table,
 		)
@@ -125,7 +135,9 @@ func (pg *PGClient) CheckIfTableExist(ctx context.Context) error {
 					if err := tx.Commit(ctx); err != nil {
 						return errors.Wrap(err, "unable to commit transaction")
 					}
-					log.Printf("[ info] [pg_plugin] skip creating a table - the table: %s exists", pg.Config.Table)
+
+					pg.log.Tracef("[pg-plugin] skip creating a table - the table: %s exists", pg.Config.Table)
+
 					return nil
 				}
 			}
@@ -141,7 +153,9 @@ func (pg *PGClient) CheckIfTableExist(ctx context.Context) error {
 	); err != nil {
 		return errors.Wrap(err, "unable to create table")
 	}
-	log.Println("[ info] [pg_plugin] create table:", pg.Config.Table)
+
+	pg.log.Traceln("[pg-plugin] create table:", pg.Config.Table)
+
 	if err := tx.Commit(ctx); err != nil {
 		return errors.Wrap(err, "unable to commit transaction")
 	}
@@ -149,7 +163,6 @@ func (pg *PGClient) CheckIfTableExist(ctx context.Context) error {
 }
 
 func (pg *PGClient) FlushLogs(ctx context.Context, tag string, datas []json.RawMessage) error {
-	// log.Println("[DEBUG]", connect.config.table)
 	db, err := pg.pool.Acquire(ctx)
 	if err != nil {
 		return errors.Wrap(err, "unable to acquire a database connection from the pool")
