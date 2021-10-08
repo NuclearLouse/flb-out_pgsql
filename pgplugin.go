@@ -7,7 +7,6 @@ import (
 	"flb-out_pgsql/pgclient"
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -17,7 +16,8 @@ import (
 
 	"github.com/fluent/fluent-bit-go/output"
 
-	logger "github.com/NuclearLouse/utilities-logger"
+	"flb-out_pgsql/logger"
+
 	"github.com/sirupsen/logrus"
 	"gopkg.in/ini.v1"
 )
@@ -29,7 +29,7 @@ var (
 )
 
 const (
-	version     = "2.1.0"
+	version     = "2.1.1"
 	configFile  = "pg-plugin.conf"
 	pluginName  = "pgsql"
 	description = "Fluent-Bit Postgresql Output Plugin written in Golang!"
@@ -53,20 +53,12 @@ func FLBPluginRegister(ctx unsafe.Pointer) int {
 		return output.FLB_ERROR
 	}
 	cfgLog := logger.DefaultConfig()
+
 	if err := cfg.Section("logger").MapTo(cfgLog); err != nil {
 		return output.FLB_ERROR
 	}
 
-	logsDir := path.Dir(cfgLog.LogFile)
-	if logsDir != "." {
-		if err := os.MkdirAll(logsDir, 0666); err != nil {
-			return output.FLB_ERROR
-		}
-	}
-	log, err = logger.New(cfgLog)
-	if err != nil {
-		return output.FLB_ERROR
-	}
+	log = logger.New(cfgLog)
 
 	log.Infof("[pg-plugin] register %s Version:%s with name:%s", description, version, pluginName)
 

@@ -1,10 +1,6 @@
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
-github.com/NuclearLouse/utilities-environ v0.0.0-20201116150547-73685ad3935f h1:GHMHdt82/TmLTNiuihzsJ9TvZtCR79AOddlpFT3RagM=
-github.com/NuclearLouse/utilities-environ v0.0.0-20201116150547-73685ad3935f/go.mod h1:itlk4pRlpucmTs5gwsrLtlzqGQNui3af+HUO99ITc4I=
-github.com/NuclearLouse/utilities-logger v0.0.5 h1:D4fSGtBDWi8tabt8pxXyoOSc/YoWT3ln8H4keFhO5SU=
-github.com/NuclearLouse/utilities-logger v0.0.5/go.mod h1:YVovtQlRlZCUc1zdldnqTsmBVBqB3B/pNRIFcCREGpc=
 github.com/antonfisher/nested-logrus-formatter v1.3.0 h1:8zixYquU1Odk+vzAaAQPAdRh1ZjmUXNQ1T+dUBvlhVo=
 github.com/antonfisher/nested-logrus-formatter v1.3.0/go.mod h1:6WTfyWFkBc9+zyBaKIqRrg/KwMqBbodBjgbHjDz7zjA=
 github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I=
