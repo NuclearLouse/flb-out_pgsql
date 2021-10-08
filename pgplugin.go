@@ -52,6 +52,7 @@ func FLBPluginRegister(ctx unsafe.Pointer) int {
 	if err != nil {
 		return output.FLB_ERROR
 	}
+	cfg.NameMapper = ini.TitleUnderscore
 	cfgLog := logger.DefaultConfig()
 
 	if err := cfg.Section("logger").MapTo(cfgLog); err != nil {
